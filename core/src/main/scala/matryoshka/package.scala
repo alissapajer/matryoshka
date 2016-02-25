@@ -262,6 +262,12 @@ package object matryoshka extends CofreeInstances with FreeInstances {
     */
   def once[A](f: A => Option[A]): A => A = expr => f(expr).getOrElse(expr)
 
+  /** Converts a failable fold into a non-failable, by returning the default
+   * upon failure.
+    */
+  def onceDefault[A, B](f: A => Option[B], default: B): A => B =
+    expr => f(expr).getOrElse(default)
+
   /** Count the instinces of `form` in the structure.
     */
   def count[T[_[_]]: Recursive, F[_]: Functor: Foldable](form: T[F]): F[(T[F], Int)] => Int =
